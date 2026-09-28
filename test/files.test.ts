@@ -19,6 +19,7 @@ test("files: one index walks each root once, and a later caller adds only the ro
     assert.deepEqual(index.extend(["src"]), ["src/a.ts", "src/q.sql"]);
     assert.deepEqual(index.extend(["src", "test", "nope"]), ["src/a.ts", "src/q.sql", "test/a.test.ts"], "test/ added, src/ not walked again, a missing root ignored");
     assert.ok(isUnder("src/q.sql", "src") && isUnder("src/q.sql", ".") && !isUnder("test/a.test.ts", "src"));
+    assert.ok(isUnder(".github/ci.yml", ".github") && !isUnder("github/ci.yml", ".github"), "a dot-prefixed root keeps its dot");
     // Both consumers see one tree: a .sql under test/ is a text file only when test/ was asked for.
     writeFileSync(join(dir, "test/t.sql"), "");
     const shared = new FileIndex(dir);

@@ -110,4 +110,7 @@ test("diff: a configured `paths:` narrows a review to the changed files under it
   assert.deepEqual(changedFilesUnder(changed, ["test/t.ts"]), ["test/t.ts"], "a file names itself");
   assert.deepEqual(changedFilesUnder(changed, ["./src/", "test"]), ["src/a.ts", "src/deep/b.ts", "test/t.ts"], "spelling does not matter");
   assert.deepEqual(changedFilesUnder(changed, ["lib"]), [], "nothing under it: nothing to review, not everything");
+  assert.deepEqual(changedFilesUnder(changed, ["."]), changed, "the repository root claims every changed file");
+  assert.deepEqual(changedFilesUnder(changed, ["./"]), changed, "the root, spelt with a slash");
+  assert.deepEqual(changedFilesUnder([".github/ci.yml", "src/a.ts"], [".github"]), [".github/ci.yml"], "a dot-prefixed directory keeps its dot");
 });

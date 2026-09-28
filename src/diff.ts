@@ -16,6 +16,8 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
+import { isUnder } from "./files.ts";
+
 const execFileAsync = promisify(execFile);
 
 /** Post-image line ranges per file, inclusive at both ends. */
@@ -154,10 +156,5 @@ export function changedFiles(
  */
 export function changedFilesUnder(changed: string[], paths: string[]): string[] {
   if (paths.length === 0) return changed;
-  const norm = (p: string) => p.replace(/^\.\//, "").replace(/\/+$/, "");
-  const roots = paths.map(norm);
-  return changed.filter((f) => {
-    const file = norm(f);
-    return roots.some((r) => file === r || file.startsWith(`${r}/`));
-  });
+  return changed.filter((f) => paths.some((p) => isUnder(f, p)));
 }

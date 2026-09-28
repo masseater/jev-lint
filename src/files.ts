@@ -117,8 +117,8 @@ export class FileIndex {
 
 /** Is `file` (relative, forward slashes) at or under `root` (as given to the walk)? */
 export function isUnder(file: string, root: string): boolean {
-  const r = root.split(sep).join("/").replace(/^\.\/?/, "").replace(/\/$/, "");
-  if (r === "" || r === ".") return true;
+  const r = root.split(sep).join("/").replace(/^\.(\/|$)/, "").replace(/\/+$/, "");
+  if (r === "") return true;
   return file === r || file.startsWith(`${r}/`);
 }
 
